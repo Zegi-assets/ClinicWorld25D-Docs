@@ -1,3 +1,4 @@
+You can find additional information on Discord - https://discord.gg/f6Ev3S9bSR
 # Contents
 
 - [General Information](index.md#how-it-works) — this page.
