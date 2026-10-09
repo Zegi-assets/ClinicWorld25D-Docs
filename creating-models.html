@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="ClinicWorld25D documentation: sprites, proxy shadows, and model creation in Unreal Engine."><title>Creating Models · ClinicWorld25D</title><link rel="stylesheet" href="style.css"></head><body><header><strong>ClinicWorld25D</strong><span>English Documentation · Unreal Engine 2.5D</span></header><div class="shell"><nav aria-label="Documentation"><a class="" href="index.html">Overview</a><a class="" href="tips.html">Useful Tips</a><a class="active" href="creating-models.html">Creating Models</a></nav><article><h1 id="before-you-begin">Before You Begin</h1>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="ClinicWorld25D documentation: sprites, proxy shadows, and model creation in Unreal Engine."><title>Creating Models · ClinicWorld25D</title><link rel="stylesheet" href="style.css"><script src="script.js" defer></script></head><body><header><strong>ClinicWorld25D</strong><span>English Documentation · Unreal Engine 2.5D</span></header><div class="shell"><nav class="site-nav" aria-label="Documentation"><a class="" href="index.html">Overview</a><a class="" href="tips.html">Useful Tips</a><a class="active" href="creating-models.html">Creating Models</a></nav><article><h1 id="before-you-begin">Before You Begin</h1>
 <p>All prompts in this guide are suggestions. You can freely modify them to suit your goals, style, and workflow.</p>
 <p>The Meshy step is optional: you can use Tripo or another similar service instead, or create the 3D models manually. Adapt the relevant steps and prompts to your chosen tools.</p>
 <p>Using an AI agent is strongly recommended. Set your Unreal Engine project folder (the folder containing the <code>.uproject</code> file) as the agent's main working folder so it can work directly with the project files. You can also follow this guide manually and copy all files to the appropriate folders yourself.</p>
@@ -147,4 +147,36 @@ Simply drag and drop the <code>SPR_</code> sprite into the <code>Sprite</code> f
 <p>Simply run <code>Script\move_new_mesh_files.bat</code> and the files from the <code>New</code> folders will be moved one level up.</p>
 <h3 id="3d-model-optimization">3D Model Optimization</h3>
 <p>You can make models ultra low-poly. And since the models don't have complex materials with transparency, you can use Nanite. Sometimes Nanite even helps eliminate problematic areas:</p>
-<p><a href="https://youtu.be/h_3f4ejzNa0">Watch video on YouTube</a></p></article></div><footer>ClinicWorld25D · <a href="https://github.com/Zegi-assets/ClinicWorld25D-Docs">Documentation on GitHub</a></footer></body></html>
+<p><a href="https://youtu.be/h_3f4ejzNa0">Watch video on YouTube</a></p></article><aside class="page-toc"><details open><summary>On this page</summary><nav aria-label="On this page"><div class="toc">
+<ul>
+<li><a href="#before-you-begin">Before You Begin</a><ul>
+<li><a href="#fully-automated-workflow">Fully Automated Workflow</a></li>
+</ul>
+</li>
+<li><a href="#folder-preparation">Folder Preparation</a></li>
+<li><a href="#creating-a-concept">Creating a Concept</a></li>
+<li><a href="#creating-models">Creating Models</a><ul>
+<li><a href="#creating-references">Creating References</a></li>
+<li><a href="#creating-3d-models">Creating 3D Models</a><ul>
+<li><a href="#setting-up-the-meshy-api-key">Setting Up the Meshy API Key</a></li>
+<li><a href="#placing-3d-models">Placing 3D Models</a></li>
+</ul>
+</li>
+<li><a href="#creating-textures">Creating Textures</a><ul>
+<li><a href="#assigning-the-sprite">Assigning the Sprite</a></li>
+<li><a href="#sprite-adjustment">Sprite Adjustment</a><ul>
+<li><a href="#zorder">ZOrder</a></li>
+<li><a href="#scale">Scale</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#cleaning-up-new-folders">Cleaning Up New Folders</a><ul>
+<li><a href="#3d-model-optimization">3D Model Optimization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></details></aside></div><footer>ClinicWorld25D · <a href="https://github.com/Zegi-assets/ClinicWorld25D-Docs">Documentation on GitHub</a></footer></body></html>
