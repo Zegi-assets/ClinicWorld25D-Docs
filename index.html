@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="ClinicWorld25D documentation: sprites, proxy shadows, and model creation in Unreal Engine."><title>Overview · ClinicWorld25D</title><link rel="stylesheet" href="style.css"></head><body><header><strong>ClinicWorld25D</strong><span>English Documentation · Unreal Engine 2.5D</span></header><div class="shell"><nav aria-label="Documentation"><a class="active" href="index.html">Overview</a><a class="" href="tips.html">Useful Tips</a><a class="" href="creating-models.html">Creating Models</a></nav><article><h1 id="contents">Contents</h1>
+<ul>
+<li><a href="index.html#how-it-works">General Information</a> — this page.</li>
+<li><a href="tips.html">Useful Tips</a> — start with this page.</li>
+<li><a href="creating-models.html">Creating Models</a>.</li>
+</ul>
+<h1 id="how-it-works">How It Works</h1>
+<p>Two orthographic cameras are used.
+The primary camera displays sprites and the shadow map.
+The secondary camera looks at proxy meshes and generates the shadow map. The secondary camera updates the shadow map only when the camera moves (updating shadows during zoom is not necessary) or when requested by BP logic. Proxy meshes do not use complex materials and can be very low quality — their purpose is to create shadows and serve as a reference for drawing perspective.</p>
+<p>3D characters have been added to the demo scene. Although the developer will spend most of the time around the proxy meshes, the 3D characters are located next to the sprites. This makes navigation calculations more convenient. 
+3D characters can cast regular shadows rather than proxy shadows. This approach allows updating the shadow map infrequently and VERY significantly increases performance. </p>
+<p>Overall, frame time should be under 10ms.</p>
+<p><img src="Pasted%20image%2020261002104428.png" alt="Unreal Engine screenshot" loading="lazy"></p>
+<h2 id="asset-strengths">Asset Strengths</h2>
+<p>You can very quickly (using AI) create a large number of sprites that look like 3D objects in a consistent style. Since meshes are only needed for shadows, you can make them ultra low-poly with very messy topology, and it will still work great.</p>
+<p>You don't need to create high-quality materials or PBR textures — a 2D sprite is enough.</p>
+<p>The asset supports dynamic lighting. </p>
+<p>You don't need an expensive model to create sprites. Personally, I use Luna from ChatGPT.</p>
+<h2 id="asset-weaknesses">Asset Weaknesses:</h2>
+<p>The asset uses two cameras: the primary camera
+<img src="Pasted%20image%2020260928103516.png" alt="Unreal Engine screenshot" loading="lazy">
+and the shadow camera
+<img src="Pasted%20image%2020260928103644.png" alt="Unreal Engine screenshot" loading="lazy"></p>
+<p>By default, the secondary camera updates the image every 0.3 seconds. If there are no dynamic objects in the frame, baking shadows just once is enough.</p>
+<p>All the challenges revolve around 3D characters. 
+You will have to choose between quality and performance.
+<img src="Pasted%20image%2020260928103347.png" alt="Unreal Engine screenshot" loading="lazy">
+In performance mode:
+The shadow camera updates every 0.3 seconds, and dynamic 3D characters (the one walking) stop using proxy shadows and switch to regular shadows. Logic for dynamic objects is also disabled. For example, doors will always stay open.
+Relatively static 3D characters (standing or sitting) continue to use high-quality shadows. Updating shadows every 0.3 seconds is sufficient for them.</p>
+<p>In quality mode:
+The shadow camera updates every game frame.
+Dynamic 3D characters use shadows from proxy meshes. Dynamic objects start working, such as doors.</p>
+<p>There are issues when 3D objects interact with 2D objects.
+<a href="https://youtu.be/tTf1qSkUecU">Watch video on YouTube</a>
+Video recorded in "quality" mode.</p>
+<p><a href="https://youtu.be/sWyqWHh1D8M">Watch video on YouTube</a>
+This video is in "performance" mode.</p>
+<p>In both cases there are issues.
+It is very difficult to place a character perfectly in a narrow doorway:
+<img src="Pasted%20image%2020260928103132.png" alt="Unreal Engine screenshot" loading="lazy"></p>
+<p>In the second case, the FPS is much better, but shadows from objects are projected on top of the character.</p></article></div><footer>ClinicWorld25D · <a href="https://github.com/Zegi-assets/ClinicWorld25D-Docs">Documentation on GitHub</a></footer></body></html>

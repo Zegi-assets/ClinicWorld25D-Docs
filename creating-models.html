@@ -1,0 +1,150 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="ClinicWorld25D documentation: sprites, proxy shadows, and model creation in Unreal Engine."><title>Creating Models · ClinicWorld25D</title><link rel="stylesheet" href="style.css"></head><body><header><strong>ClinicWorld25D</strong><span>English Documentation · Unreal Engine 2.5D</span></header><div class="shell"><nav aria-label="Documentation"><a class="" href="index.html">Overview</a><a class="" href="tips.html">Useful Tips</a><a class="active" href="creating-models.html">Creating Models</a></nav><article><h1 id="before-you-begin">Before You Begin</h1>
+<p>All prompts in this guide are suggestions. You can freely modify them to suit your goals, style, and workflow.</p>
+<p>The Meshy step is optional: you can use Tripo or another similar service instead, or create the 3D models manually. Adapt the relevant steps and prompts to your chosen tools.</p>
+<p>Using an AI agent is strongly recommended. Set your Unreal Engine project folder (the folder containing the <code>.uproject</code> file) as the agent's main working folder so it can work directly with the project files. You can also follow this guide manually and copy all files to the appropriate folders yourself.</p>
+<h2 id="fully-automated-workflow">Fully Automated Workflow</h2>
+<p>An AI agent can carry out all steps in this guide independently, including assembling the scene. Starting with Unreal Engine 5.8, you can connect a compatible agent to the editor through <a href="https://dev.epicgames.com/documentation/unreal-engine/unreal-mcp-in-unreal-editor">Unreal MCP</a>. Once the agent is connected and has access to the project folder and the necessary services, give it a link to this documentation and describe the desired result. With that setup, you can delegate the entire workflow without manually performing each step.</p>
+<p>However, full automation can consume tens of times more tokens than a workflow where you perform some steps yourself, and potentially even hundreds of times more. These are possible magnitudes, not a guaranteed ratio: actual usage depends on the agent, the task, and the number of iterations.</p>
+<p>The result may not match your preferences, especially the scene layout and composition. Decide in advance how each sprite should be oriented in the scene. Since its perspective is baked into the image, changing that orientation later may require regenerating individual sprites, which can be tedious and consume additional tokens.</p>
+<h1 id="folder-preparation">Folder Preparation</h1>
+<p>Download <code>ClinicWorld25D_AdditionalFiles.zip</code> from the asset's <strong>Additional Files</strong> section on Fab and extract it directly into the root of your Unreal Engine project — the folder containing the <code>.uproject</code> file, <code>Content</code>, and <code>Config</code>.</p>
+<p>After extraction, the <code>Script</code> and <code>Files</code> folders must be directly inside the project root, without an extra <code>ClinicWorld25D_AdditionalFiles</code> folder around them. The archive includes helper scripts and source files: FBX models, reference images, perspective screenshots, sprites, processed textures, and style images.</p>
+<p>All <code>Files\...</code> and <code>Script\...</code> paths in this guide are relative to the project root. For script requirements and usage, see <code>Script\README.md</code>. If these folders already exist, merge them carefully and preserve your own files.</p>
+<p>If you have already created new models and sprites, you need to clean up the New folders. To do this, run the script <code>Script\move_new_mesh_files.bat</code> with a double-click.</p>
+<h1 id="creating-a-concept">Creating a Concept</h1>
+<p>You will need a concept for the overall style of your environment.
+Generate the concept using any convenient method and place it in <code>Files\Styles</code>.</p>
+<p>Example prompt:</p>
+<pre><code>Draw a concept of a clinic reception area. Use high detail. Isometric camera with angles (Pitch=-35.264000,Yaw=45.000000,Roll=0.000000)
+</code></pre>
+<h1 id="creating-models">Creating Models</h1>
+<h2 id="creating-references">Creating References</h2>
+<p>You will need references for your future sprites.
+Use an example prompt like this:</p>
+<pre><code>Create references that will be used to generate 3D models. On a clean background, without shadows.
+The style for the references is located in this folder: 
+
+Files\Styles\
+
+Give the generated files proper names in English without spaces.
+Place the results in:
+Files\Meshes\Reference\New
+
+If the folder Files\Meshes\Reference\New already contains files, warn me about it. The proper way to clear the folder is to run Script\move_new_mesh_files.bat
+
+Create:
+</code></pre>
+<h2 id="creating-3d-models">Creating 3D Models</h2>
+<p>You need 3D models for two purposes:
+1. So the AI understands the perspective
+2. To generate shadows
+You do not need high-quality models. You can even assemble something similar from primitives right inside UE and it will work.</p>
+<p>However, it is much easier and faster to use AI to generate models. 
+Referral links will be added here.</p>
+<h3 id="setting-up-the-meshy-api-key">Setting Up the Meshy API Key</h3>
+<p>Create a key in the <strong>API Keys</strong> section of the Meshy Developer Platform and copy it. See the <a href="https://docs.meshy.ai/en/api/authentication">Meshy instructions</a> for details.</p>
+<p>The key is usually stored in the <code>MESHY_API_KEY</code> environment variable, which the agent or script reads when calling the API. This name is used in the <a href="https://docs.meshy.ai/en/api/quick-start">Meshy example</a>; if your tool expects a different name, use the name specified in its settings.</p>
+<p>In Windows, you can do this through the interface:</p>
+<ol>
+<li>Open the Start menu and search for “Edit environment variables for your account”.</li>
+<li>Under <strong>User variables</strong>, click <strong>New</strong> (or <strong>Edit</strong> if the variable already exists).</li>
+<li>Set <strong>Variable name</strong> to <code>MESHY_API_KEY</code>.</li>
+<li>Paste the key itself into <strong>Variable value</strong>, without quotation marks or the <code>Bearer</code> prefix.</li>
+<li>Save the changes with <strong>OK</strong>, then fully restart the agent application and the terminal you will use to access Meshy: processes that are already running retain their previous environment.</li>
+</ol>
+<p>A user variable persists between launches and does not require administrator rights. See the <a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables">Microsoft documentation</a> for more about environment variables.</p>
+<p>To check that the key is present in a new PowerShell window without displaying its value:</p>
+<pre><code class="language-powershell">-not [string]::IsNullOrWhiteSpace($env:MESHY_API_KEY)
+</code></pre>
+<p><code>True</code> means the variable is available to that process. This does not yet verify that the key is valid or that API access works.</p>
+<p>You can also simply ask your agent to set up the key :-)</p>
+<pre><code class="language-text">Help me save my Meshy API key in the MESHY_API_KEY environment variable for the current Windows user. Arrange for me to enter the key locally myself, without sending it in chat. Do not display the key or save it in project files or documentation. Check that the variable exists without displaying its value, and tell me which application needs to be restarted.
+</code></pre>
+<p>Generation prompt:</p>
+<pre><code>
+Create 3D models using the Meshy API (Meshy-7, the price will be 25 credits per model, I grant permission for this)
+
+Model parameters:
+
+{
+  &quot;ai_model&quot;: &quot;latest&quot;,
+  &quot;geometry_resolution&quot;: &quot;2k&quot;,
+  &quot;model_type&quot;: &quot;standard&quot;,
+  &quot;should_texture&quot;: false,
+  &quot;should_remesh&quot;: true,
+  &quot;decimation_mode&quot;: 2,
+  &quot;topology&quot;: &quot;triangle&quot;,
+  &quot;target_formats&quot;: [&quot;fbx&quot;],
+  &quot;origin_at&quot;: &quot;bottom&quot;,
+  &quot;auto_size&quot;: true,
+  &quot;image_enhancement&quot;: true
+}
+
+
+and place the fbx files in Files\Meshes\Fbx\New
+
+take references for meshy-7 from here: Files\Meshes\Reference\New
+
+Give the files the same names as the references, but with the prefix SM.
+do not verify how the fbx generated — I will check it myself.
+
+</code></pre>
+<h3 id="placing-3d-models">Placing 3D Models</h3>
+<p>Move the fbx files into any folder in your project, for example <code>/ClinicWorld25D/Meshes/Proxy</code>.
+In <code>BP_SpriteProxyBase</code>, clear <code>Sprite</code> and assign the new 3D mesh.
+Adjust <code>ZRotation</code> until you are satisfied with the result. You can create multiple copies of an item with different <code>ZRotation</code> values.</p>
+<blockquote>
+<p><strong>Important</strong>
+ The Rotation Z value from SM_ProxyShadow will be written into the name of the future sprite.
+ This value will be used later to correctly position the proxy mesh.</p>
+</blockquote>
+<p>Make sure that <code>PerspectiveShear</code> and <code>SpriteOffset</code> are set to 0.</p>
+<p><a href="https://youtu.be/ASfTrTJzeUY">Watch video on YouTube</a>
+After that, in <code>BP_CaptureSpawner</code>, click <strong>FillSprite</strong> and <strong>SpawnMeshes</strong>. The actor will collect all <code>BP_SpriteProxyBase</code> instances without a Sprite and position the 3D meshes in an orientation suitable for screenshots.</p>
+<p><img src="Pasted%20image%2020260925162139.png" alt="Unreal Engine screenshot" loading="lazy" width="700"></p>
+<p>Then press Play.</p>
+<p><a href="https://youtu.be/drQFPAa5MlY">Watch video on YouTube</a>
+Screenshots will be located in <code>Files\Meshes\Screens\New</code>.</p>
+<p>Don't forget to delete the created meshes from the scene; to do this, click 
+<strong>Destroy Spawned Meshes</strong>.
+<img src="Pasted%20image%2020260925162550.png" alt="Unreal Engine screenshot" loading="lazy"></p>
+<h2 id="creating-textures">Creating Textures</h2>
+<p>Use approximately the following prompt to generate textures:</p>
+<pre><code>take the images in Files\Meshes\Screens\New 
+
+Draw detailed textures without shadows strictly in the same proportions, in the same perspective, and at the same resolution (2048x2048) as the 3D model screenshot. Take file names into account to understand what is depicted in the screenshot.
+Textures must be on a solid, uniform contrasting background #FF00FF. However, if the image generator produces images without a background right away, that is great! Do not force-add a background.
+
+Reference images with the same name are located here: Files\Meshes\Reference\New. Use them to create the texture in the required projection.
+
+Place finished png files in Files\Meshes\Sprites\New.
+The name of the new png must contain t_ItemName.png. It is very important to preserve Yaw and its value in the file name.
+</code></pre>
+<p>Depending on your image generation model, you may get perfect textures without any background, or with a <code>#FF00FF</code> background.
+If there is no background, run:
+<code>\Script\Prepare Transparent Textures.bat</code>
+If the textures have a background, run:
+<code>\Script\Prepare Chroma Textures.bat</code></p>
+<p>In either case, the result will look roughly like this:</p>
+<p><img src="Pasted%20image%2020260926100901.png" alt="Unreal Engine screenshot" loading="lazy"></p>
+<p>Then, from Unreal Engine, run the script <code>import_processed_sprites.py</code>:</p>
+<p><img src="Pasted%20image%2020260926102949.png" alt="Unreal Engine screenshot" loading="lazy"></p>
+<h3 id="assigning-the-sprite">Assigning the Sprite</h3>
+<p><a href="https://youtu.be/8qln9bvIU1o">Watch video on YouTube</a>
+Simply drag and drop the <code>SPR_</code> sprite into the <code>Sprite</code> field and click <strong>FixAll</strong>.
+<img src="Pasted%20image%2020260926104105.png" alt="Unreal Engine screenshot" loading="lazy"></p>
+<h3 id="sprite-adjustment">Sprite Adjustment</h3>
+<p>The AI image generator might occasionally make an error with perspective. This is rare, but it happens.</p>
+<p>You can manually adjust the sprite right in UE (the result will be better in Photoshop, but UE's built-in tools are usually sufficient).</p>
+<p>The video clearly shows the issue and how to fix it:</p>
+<p><a href="https://youtu.be/2n6UNE6s4u0">Watch video on YouTube</a></p>
+<h4 id="zorder">ZOrder</h4>
+<p>Much more often, you will need to adjust the distance from the sprite to the camera. Simply change the <code>ZOrder</code> value:</p>
+<p><a href="https://youtu.be/ZF_KgzIgENA">Watch video on YouTube</a></p>
+<h4 id="scale">Scale</h4>
+<p>Adjusted just like ZOrder — simply change the <code>NewScale</code> value.</p>
+<h2 id="cleaning-up-new-folders">Cleaning Up New Folders</h2>
+<p>Simply run <code>Script\move_new_mesh_files.bat</code> and the files from the <code>New</code> folders will be moved one level up.</p>
+<h3 id="3d-model-optimization">3D Model Optimization</h3>
+<p>You can make models ultra low-poly. And since the models don't have complex materials with transparency, you can use Nanite. Sometimes Nanite even helps eliminate problematic areas:</p>
+<p><a href="https://youtu.be/h_3f4ejzNa0">Watch video on YouTube</a></p></article></div><footer>ClinicWorld25D · <a href="https://github.com/Zegi-assets/ClinicWorld25D-Docs">Documentation on GitHub</a></footer></body></html>
